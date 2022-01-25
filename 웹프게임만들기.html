@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<style>
+		p{
+			text-align: center;
+		}
+		img{
+			width:  90px; height: 90px;
+			position: absolute;
+			visibility: hidden;
+		}
+	</style>
+	<script type="text/javascript">
+
+		var maxScore = 100
+		var score = 0
+		var imageNames = ['media/banana.png', 'media/apple.png', 'media/mango.png']
+		var imgs = []
+
+		var loadingCount  = 0
+		function waitingForCompleteLoading(){
+			loadingCount++
+		}
+
+		for(var i=0;i<imageNames.length;i++){ 
+			imgs[i] = document.createElement('img')
+			imgs[i].src = imageNames[i]
+			imgs[i].onload = waitingForCompleteLoading
+		}
+
+		var intervalID = null
+		var gameRunning = false
+		function start(){
+			if(loadingCount < imageNames.length){
+				alert('이지미 로딩중입니다. 잠시후 다시 시작하세요')
+				return
+			}
+
+			for(var i=0;i<imageNames.length;i++){ 
+				document.body.appendChild(imgs[i])
+			}
+
+			score = 0
+			var span= document.getElementById('score')
+			span.innerHTML = 'score = '+ score
+
+			alert('게임은 20초간 진행됩니다. 준비 되었나요?')
+			gameRunning = true
+			playGame()
+			intervalID = setInterval('playGame()', 1000)
+			setTimeout('gameOver()', 20000)
+		}
+
+
+		function getRandomXY(){
+			var x = Math.floor(Math.random()*window.innerWidth)
+			var y = Math.floor(Math.random()*window.innerHeight)
+			return [x, y]
+		}
+
+		function gameOver(){
+
+			gameRunning = false
+			clearInterval(intervalID)
+			var p= document.getElementById('game')
+			p.innerHTML += '<br><h1>Game Over</h1>'
+			//Game Over 지우기
+			i
+
+		}
+
+		var xy = []
+		function playGame(){
+
+			for(var i=0;i<imageNames.length;i++){
+
+				xy[i] = getRandomXY()
+				imgs[i].style.left = xy[i][0] + 'px'
+				imgs[i].style.top = xy[i][1] + 'px'
+				imgs[i].style.visibility = 'visible'
+				//정사각형 만들기
+				var x = Math.floor(Math.random()*1)
+				x=y
+
+			}
+
+
+		}
+//isin 함수 완성하기
+		function isIn(x, y, left, top, width, height){
+			if(left<=x<=left+width && top<=y<=top+height){
+			return true
+		}
+		else{
+			return false
+		}
+	}
+
+		
+
+
+		window.onclick = function checkScoring(e){
+			if(gameRunning == false)	return
+
+			for(var i=0;i<xy.length;i++){
+				if(isIn(event.x, event.y, xy[i][0], xy[i][1],imgs[i].width, imgs[i].height)){
+					score += (maxScore - imgs[i].width)
+					var span= document.getElementById('score')
+					span.innerHTML = 'score = '+ score
+				}
+			}
+		}
+
+	</script>
+</head>
+<body>
+	<p id='game'>과일 줍기 게임: <span id='score'>score = 0</span> <button onclick='start()'>start game</button>
+	</p>
+	
+
+</body>
+</html>
